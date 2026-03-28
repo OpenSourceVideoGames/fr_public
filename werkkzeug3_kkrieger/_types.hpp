@@ -612,6 +612,16 @@ sBool sScanName(const sChar *&scan,sChar *buffer,sInt size);
 void sScanSpace(const sChar *&scan);
 sBool sScanCycle(const sChar *cycle,sInt index,sInt &start,sInt &len);
 
+// Legacy compatibility overloads: old code passes mutable scan pointers.
+__forceinline sInt sScanInt(sChar *&scan) { const sChar *p=scan; sInt v=sScanInt(p); scan=(sChar *)p; return v; }
+__forceinline sInt sScanHex(sChar *&scan) { const sChar *p=scan; sInt v=sScanHex(p); scan=(sChar *)p; return v; }
+#if !sMOBILE
+__forceinline sF32 sScanFloat(sChar *&scan) { const sChar *p=scan; sF32 v=sScanFloat(p); scan=(sChar *)p; return v; }
+#endif
+__forceinline sBool sScanString(sChar *&scan,sChar *buffer,sInt size) { const sChar *p=scan; sBool v=sScanString(p,buffer,size); scan=(sChar *)p; return v; }
+__forceinline sBool sScanName(sChar *&scan,sChar *buffer,sInt size) { const sChar *p=scan; sBool v=sScanName(p,buffer,size); scan=(sChar *)p; return v; }
+__forceinline void sScanSpace(sChar *&scan) { const sChar *p=scan; sScanSpace(p); scan=(sChar *)p; }
+
 void sCopyString(sChar *d,const sChar *s,sInt size);
 sInt sCmpString(const sChar *a,const sChar *b);
 sBool sFormatString(sChar *buffer,sInt size,const sChar *format,const sChar **fp); // return sFALSE if text is truncated!

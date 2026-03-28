@@ -7,7 +7,11 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
+#ifdef APSTUDIO_INVOKED
 #include "afxres.h"
+#else
+#include <winres.h>
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -34,7 +38,7 @@ END
 
 2 TEXTINCLUDE 
 BEGIN
-    "#include ""afxres.h""\r\n"
+    "#include ""winres.h""\r\n"
     "\0"
 END
 
@@ -128,4 +132,3 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
-

@@ -3,13 +3,13 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(DXSDK_DIR)\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(WindowsSDK_IncludePath);$(FrameworkSDKDir)\include</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(WindowsSDK_IncludePath);$(WindowsSdkDir)Include\$(WindowsTargetPlatformVersion)\shared;$(WindowsSdkDir)Include\$(WindowsTargetPlatformVersion)\um;$(WindowsSdkDir)Include\$(WindowsTargetPlatformVersion)\ucrt;$(UniversalCRTSdkDir)Include\$(UCRTVersion)\ucrt;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)'=='Win32'">
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(WindowsSDK_LibraryPath_x86);$(FrameworkSDKDir)\lib</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)\lib\x86;$(WindowsSDK_LibraryPath_x86);$(WindowsSdkDir)Lib\$(WindowsTargetPlatformVersion)\um\x86;$(WindowsSdkDir)Lib\$(WindowsTargetPlatformVersion)\ucrt\x86;$(UniversalCRTSdkDir)Lib\$(UCRTVersion)\ucrt\x86;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)'=='x64'">
-    <LibraryPath>$(DXSDK_DIR)\lib\x64;$(VCInstallDir)lib\amd64;$(VCInstallDir)atlmfc\lib\amd64;$(WindowsSdkDir)lib\x64;$(WindowsSDK_LibraryPath_x64);$(FrameworkSDKDir)\lib\x64</LibraryPath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)\lib\x64;$(WindowsSDK_LibraryPath_x64);$(WindowsSdkDir)Lib\$(WindowsTargetPlatformVersion)\um\x64;$(WindowsSdkDir)Lib\$(WindowsTargetPlatformVersion)\ucrt\x64;$(UniversalCRTSdkDir)Lib\$(UCRTVersion)\ucrt\x64;$(VCInstallDir)lib\amd64;$(VCInstallDir)atlmfc\lib\amd64;$(WindowsSdkDir)lib\x64;$(FrameworkSDKDir)\lib\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>

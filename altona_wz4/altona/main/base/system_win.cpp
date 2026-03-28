@@ -30,7 +30,6 @@
 #include <xinput.h>
 #include <vfw.h>
 #include <dbt.h>            // DBT_DEVNODES_CHANGED
-#include <dxerr.h>
 #if sCONFIG_COMPILER_MSC
 #undef new
 #define _MFC_OVERRIDES_NEW
@@ -285,15 +284,13 @@ void DXError(sU32 err)
 #define DIErr(hr) { sU32 err=hr; if(FAILED(err)) DXError(err); }
 
 #else
-#pragma comment(lib,"dxerr.lib")
 void DXError(sU32 err,const sChar *file,sInt line,const sChar *system)
 {
   if(FAILED(err))
   {
     sString<1024> buffer;
 
-    sSPrintF(buffer,L"%s(%d): %s error %08x (%d): %s (%s)",file,line,system,err,err&0x3fff,
-      DXGetErrorStringW(err),DXGetErrorDescriptionW(err));
+    sSPrintF(buffer,L"%s(%d): %s error %08x (%d)",file,line,system,err,err&0x3fff);
     sFatal(buffer);
   }
 }

@@ -2055,7 +2055,7 @@ int APIENTRY WinMain(HINSTANCE inst,HINSTANCE prev,LPSTR cmdline,int show)
 	ExitProcess(0);
 }
 #else
-void WinMainCRTStartup()
+extern "C" void WinMainCRTStartup()
 {
 	WInst = GetModuleHandle(0);
   WCmdLine = GetCommandLineA();

@@ -18,8 +18,9 @@
 #define sMOBILE           0                         // mobile devices - very limited types.hpp
 #define sDEBUG            0                         // include debug code in release build
 #define sLIBPATH          "../"                     // libs (ogg,...) relative to project path
+#define sNOCRT            0                         // assume no c runtime library is present
 
-#define sCONFIGDIALOG     1                         // configuration dialog at start
+#define sCONFIGDIALOG     0                         // configuration dialog at start
 
 // what is supported?
 

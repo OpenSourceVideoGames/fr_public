@@ -166,7 +166,7 @@ sU32 GetColor32(const sInt4 &colx)
   return col;
 }
 
-void __forceinline Fade64(sU64 &r,sU64 &c0,sU64 &c1,sInt fade)
+void Fade64(sU64 &r,sU64 &c0,sU64 &c1,sInt fade)
 {
   static const sU64 xor0 = 0xffffffff00000000;
   static const sU64 add0 = 0x0000800100000000;

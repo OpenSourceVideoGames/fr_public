@@ -589,6 +589,7 @@ struct KSpline
 struct KDoc
 {
   void Init(const sU8 *&data);
+  __forceinline void Init(sU8 *&data) { const sU8 *p=data; Init(p); data=(sU8 *)p; }
   void Exit();
 
   sU8 *SongData;                  // only set in player

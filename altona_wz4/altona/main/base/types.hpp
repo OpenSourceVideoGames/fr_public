@@ -1732,8 +1732,10 @@ inline void sCDECL operator delete[](void* p) { sFreeMem(p); }
 #endif // sCONFIG_DEBUGMEM
 #endif // !sCONFIG_OPTION_XSI
 
+#if !sCONFIG_COMPILER_MSC || (_MSC_VER < 1900)
 inline void *operator new(sCONFIG_SIZET, void *ptr)throw() { return ptr; }
 inline void *operator new[](sCONFIG_SIZET, void *ptr)throw() { return ptr; }
+#endif
 
 #undef sNEW_ALLOCATOR
 
@@ -1746,8 +1748,10 @@ inline void *operator new[](sCONFIG_SIZET, void *ptr)throw() { return ptr; }
 #endif  // !IOS 
 
 #if sPLATFORM==sPLAT_IOS
+#if !sCONFIG_COMPILER_MSC || (_MSC_VER < 1900)
 inline void *operator new(sCONFIG_SIZET, void *ptr)throw() { return ptr; }
 inline void *operator new[](sCONFIG_SIZET, void *ptr)throw() { return ptr; }
+#endif
 #define sDEFINE_NEW new
 #endif // IOS
 

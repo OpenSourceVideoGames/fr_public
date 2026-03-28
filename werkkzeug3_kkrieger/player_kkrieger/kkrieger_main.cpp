@@ -8,6 +8,7 @@
 #include "kkriegergame.hpp"
 #include "engine.hpp"
 #include "genoverlay.hpp"
+#include "rtmanager.hpp"
 
 /****************************************************************************/
 
@@ -18,6 +19,8 @@ KDoc *Document;
 KEnvironment *Environment;
 KKriegerGame *Game;
 sF32 GlobalFps;
+extern sInt DebugTextMem;
+sInt DebugTexMem = 0;
 
 extern "C" sU8 DebugData[];
 static sU8* PtrTable[] =
@@ -109,14 +112,16 @@ void IntroSoundHandler(sS16 *stream,sInt left,void *user)
   sF32 *fp;
   sInt count;
   sInt i;
+  CV2MPlayer *snd;
 
   SoundTimer += left;
-  if(Sound)
+  snd = Sound;
+  if(snd)
   {
     while(left>0)
     {
       count = sMin<sInt>(4096,left);
-      Sound->Render(buffer,count);
+      snd->Render(buffer,count);
       fp = buffer;
       for(i=0;i<count*2;i++)
         //*stream++ = 0;
@@ -126,9 +131,12 @@ void IntroSoundHandler(sS16 *stream,sInt left,void *user)
 #pragma lekktor(off)
     if(SoundTimer>=(2*60+25)*44100)
     {
-      Sound->Open(Document->SongData);
-      Sound->Play(0);
-      SoundTimer = 0;
+      if(Document && Document->SongData && Document->SongSize)
+      {
+        snd->Open(Document->SongData);
+        snd->Play(0);
+        SoundTimer = 0;
+      }
     }
 #pragma lekktor(on)
   }
@@ -155,6 +163,7 @@ sBool sAppHandler(sInt code,sDInt value)
   sViewport vp,clearvp;
   sInt i,max;
   sF32 curfps;
+  sU32 hdrFlags;
   static sF32 oldfps;
   static sInt FirstTime,ThisTime,LastTime,sample;
   static sInt framectr=0;
@@ -174,11 +183,30 @@ sBool sAppHandler(sInt code,sDInt value)
     data = PtrTable[0];
     if(((sInt)data)==0x54525450)
     {
-
       data = sSystem->LoadFile(sSystem->GetCmdLine());
       if(data==0)
+      {
+        // fallback to exported runtime blob
+        data = sSystem->LoadFile("../../data/player_kkrieger_export.kx");
+        if(data==0)
+          data = sSystem->LoadFile("../data/player_kkrieger_export.kx");
+        if(data==0)
+          data = sSystem->LoadFile("data/player_kkrieger_export.kx");
+      }
+      if(data==0)
+      {
         sSystem->Abort("need data file");
+        return sFALSE;
+      }
     }
+
+    hdrFlags = *(sU32 *)data;
+    if(hdrFlags & ~7)
+    {
+      sSystem->Abort("invalid runtime data format (export .kx required)");
+      return sFALSE;
+    }
+
     Document = new KDoc;
     Document->Init(data);
     Environment = new KEnvironment;
@@ -186,6 +214,7 @@ sBool sAppHandler(sInt code,sDInt value)
 
     sInitPerlin();   
     GenOverlayInit();
+    RenderTargetManager = new RenderTargetManager_;
 
     Engine = new Engine_;
 
@@ -237,6 +266,7 @@ sBool sAppHandler(sInt code,sDInt value)
     delete Game;
     Document->Exit();
     delete Document;
+    delete RenderTargetManager;
     delete Engine;
     GenOverlayExit();
     break;
@@ -267,6 +297,7 @@ sBool sAppHandler(sInt code,sDInt value)
     vp.Init();
     vp.Window.Init(0,sSystem->ConfigY*1/6,sSystem->ConfigX,sSystem->ConfigY*5/6);
     GenOverlayManager->SetMasterViewport(vp);
+    RenderTargetManager->SetMasterViewport(vp);
 
     sInt mode;
     mode = Game->GetNewRoot();
@@ -281,9 +312,12 @@ sBool sAppHandler(sInt code,sDInt value)
       Environment->ExitFrame();
       Game->ResetRoot(Environment,Document->RootOps[Document->CurrentRoot],0);
 
-      Sound->Open(Document->SongData);
-      Sound->Play(0);
-      sSystem->SetSoundHandler(IntroSoundHandler,64);
+      if(Sound && Document->SongData && Document->SongSize)
+      {
+        Sound->Open(Document->SongData);
+        Sound->Play(0);
+        sSystem->SetSoundHandler(IntroSoundHandler,64);
+      }
     }
 
     // timing
@@ -296,9 +330,8 @@ sBool sAppHandler(sInt code,sDInt value)
     // game painting
 
     clearvp.Init();
-    clearvp.ClearColor = 0;
-    sSystem->BeginViewport(clearvp);
-    sSystem->EndViewport();
+    sSystem->SetViewport(clearvp);
+    sSystem->Clear(sVCF_ALL,0);
 
     Environment->GameCam.Init();
     Game->GetCamera(Environment->GameCam);
@@ -308,7 +341,7 @@ sBool sAppHandler(sInt code,sDInt value)
 
     if(root->Cache->ClassId==KC_DEMO)
     {
-      GenOverlayManager->Reset();
+      GenOverlayManager->Reset(Environment);
       GenOverlayManager->RealPaint = sTRUE;
       GenOverlayManager->Game = Game;
 
@@ -316,7 +349,7 @@ sBool sAppHandler(sInt code,sDInt value)
       root->Exec(Environment);
 
       GenOverlayManager->RealPaint = sFALSE;
-      GenOverlayManager->Reset();
+      GenOverlayManager->Reset(Environment);
     }
 
     sFloatFix();

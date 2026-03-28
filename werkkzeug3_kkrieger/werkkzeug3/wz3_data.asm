@@ -10,7 +10,7 @@
                 global  _PlayerKKrieger
                 global  _PlayerIntro
 
-_PlayerDemo     incbin  "../player_demo/release/player_demo.exe"
-_PlayerKKrieger incbin  "../player_demo/release/player_demo.exe"
+_PlayerDemo     incbin  "../player_demo/debug/player_demo.exe"
+_PlayerKKrieger incbin  "../player_demo/debug/player_demo.exe"
 		;incbin  "../player_kkrieger/release/player_kkrieger.exe"
-_PlayerIntro    incbin  "../player_intro/release/player_intro.exe"
+_PlayerIntro    incbin  "../player_demo/debug/player_demo.exe"

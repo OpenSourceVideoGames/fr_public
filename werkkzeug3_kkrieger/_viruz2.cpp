@@ -1220,7 +1220,7 @@ sU32 CV2MPlayer::CalcPositions(sS32 **a_dest)
 		}
 		curtimer+=m_tpc*usecs/8000000.0;
 	}
-	return pn;
+	return posnum;
 }
 
 #endif

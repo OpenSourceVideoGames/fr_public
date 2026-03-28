@@ -1123,16 +1123,16 @@ void GenMinMesh::VerifyAdjacency()
 
 /****************************************************************************/
 
-#if sLINK_MINMESH
 void GenMinMesh::Prepare()
 {
+#if !sPLAYER
   if(!PreparedMesh)
   {
     PreparedMesh = new EngMesh;
     PreparedMesh->FromGenMinMesh(this);
   }
-}
 #endif
+}
 
 void GenMinMesh::UnPrepare()
 {
