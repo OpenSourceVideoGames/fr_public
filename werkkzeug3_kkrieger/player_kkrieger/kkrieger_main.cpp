@@ -183,21 +183,36 @@ sBool sAppHandler(sInt code,sDInt value)
     data = PtrTable[0];
     if(((sInt)data)==0x54525450)
     {
-      data = sSystem->LoadFile(sSystem->GetCmdLine());
-      if(data==0)
+      auto TryLoadRuntime = [](const sChar *name) -> sU8 *
       {
-        // fallback to exported runtime blob
-        data = sSystem->LoadFile("../../data/player_kkrieger_export.kx");
-        if(data==0)
-          data = sSystem->LoadFile("../data/player_kkrieger_export.kx");
-        if(data==0)
-          data = sSystem->LoadFile("data/player_kkrieger_export.kx");
-      }
+        sU8 *p = sSystem->LoadFile(name);
+        if(!p) return 0;
+        if((*(sU32 *)p & ~7) == 0) return p;
+        delete[] p;
+        return 0;
+      };
+
+      const sChar *loadedName = 0;
+
+      data = TryLoadRuntime(sSystem->GetCmdLine());
+      if(data) loadedName = sSystem->GetCmdLine();
+      if(data==0) { data = TryLoadRuntime("../../data/player_kkrieger_export.kx"); if(data) loadedName = "../../data/player_kkrieger_export.kx"; }
+      if(data==0) { data = TryLoadRuntime("../data/player_kkrieger_export.kx"); if(data) loadedName = "../data/player_kkrieger_export.kx"; }
+      if(data==0) { data = TryLoadRuntime("data/player_kkrieger_export.kx"); if(data) loadedName = "data/player_kkrieger_export.kx"; }
+      if(data==0) { data = TryLoadRuntime("../../data/kkrieger3383.kx"); if(data) loadedName = "../../data/kkrieger3383.kx"; }
+      if(data==0) { data = TryLoadRuntime("../data/kkrieger3383.kx"); if(data) loadedName = "../data/kkrieger3383.kx"; }
+      if(data==0) { data = TryLoadRuntime("data/kkrieger3383.kx"); if(data) loadedName = "data/kkrieger3383.kx"; }
+      if(data==0) { data = TryLoadRuntime("../../data/kkrieger.kx"); if(data) loadedName = "../../data/kkrieger.kx"; }
+      if(data==0) { data = TryLoadRuntime("../data/kkrieger.kx"); if(data) loadedName = "../data/kkrieger.kx"; }
+      if(data==0) { data = TryLoadRuntime("data/kkrieger.kx"); if(data) loadedName = "data/kkrieger.kx"; }
       if(data==0)
       {
         sSystem->Abort("need data file");
         return sFALSE;
       }
+
+      if(loadedName)
+        sDPrintF("player_kkrieger data: %s\n",loadedName);
     }
 
     hdrFlags = *(sU32 *)data;
@@ -301,6 +316,11 @@ sBool sAppHandler(sInt code,sDInt value)
 
     sInt mode;
     mode = Game->GetNewRoot();
+
+    // Some runtime data variants expose an empty/intermediate root at mode 1.
+    // Force gameplay root to avoid getting stuck on a flat background/menu-only scene.
+    if(mode==1)
+      mode = 2;
 
     if(mode!=Document->CurrentRoot)
     {
