@@ -44,7 +44,7 @@
 #define sLINK_INTMATH     0                         // link new integer math model (for mobile)
 #define sLINK_PNG         0                         // link libpng (big, but supports images with alpha)
 #define sLINK_FRIED       0                         // link FRIED
-#define sLINK_MTRL20      0                         // link material 20
+#define sLINK_MTRL20      1                         // link material 20
 
 /****************************************************************************/
 /****************************************************************************/

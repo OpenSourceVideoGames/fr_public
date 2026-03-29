@@ -203,8 +203,8 @@ sBool sAppHandler(sInt code,sDInt value)
           data = sSystem->LoadFile("bpopening_05.kx");
         if(data==0)
         {
-          sSystem->Abort("need data file");
-          return sFALSE;
+          // Final fallback for developer/runtime builds: use data blob baked into data.asm.
+          data = DebugData;
         }
       }
     }
@@ -240,8 +240,8 @@ sBool sAppHandler(sInt code,sDInt value)
 
     if(data==0)
     {
-      sSystem->Abort("no project data loaded");
-      return sFALSE;
+      // Final fallback for developer/runtime builds: use data blob baked into data.asm.
+      data = DebugData;
     }
 
     // KDoc::Init expects exported runtime stream whose first dword is small flags bitfield.

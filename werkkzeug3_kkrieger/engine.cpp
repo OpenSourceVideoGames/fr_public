@@ -2748,7 +2748,7 @@ void Engine_::AddSectorJob(GenScene *sector,KOp *sectorData,const sMatrix &matri
 
 void Engine_::ProcessPortals(KEnvironment *kenv,KKriegerCell *observerCell)
 {
-#if !sINTRO // no portal culling in intros
+#if !sINTRO || sLINK_KKRIEGER // kkrieger player needs sector processing even in intro-sized config
   sFRect unitBox;
   unitBox.Init(-1,-1,1,1);
 

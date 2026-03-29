@@ -5729,12 +5729,21 @@ sInt sSystem_::FontWidth(const sChar *string,sInt len)
 void sSystem_::FontCharWidth(sInt ch,sInt *widths)
 {
   ABC abc;
-
-  GetCharABCWidths(GDIDC,ch,ch,&abc);
-
-  widths[0] = abc.abcA;
-  widths[1] = abc.abcB;
-  widths[2] = abc.abcC;
+  if(GetCharABCWidths(GDIDC,ch,ch,&abc))
+  {
+    widths[0] = abc.abcA;
+    widths[1] = abc.abcB;
+    widths[2] = abc.abcC;
+  }
+  else
+  {
+    sInt w = 0;
+    if(!GetCharWidth32(GDIDC,ch,ch,&w))
+      w = 0;
+    widths[0] = 0;
+    widths[1] = w;
+    widths[2] = 0;
+  }
 }
 
 void sSystem_::FontPrint(sInt x,sInt y,const sChar *string,sInt len)
