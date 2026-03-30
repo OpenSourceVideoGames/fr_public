@@ -112,13 +112,14 @@
       <ForcedIncludeFiles>$(SolutionDir)/player_demo/demo_config.hpp;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;gdi32.lib;user32.lib;glu32.lib;winmm.lib;dsound.lib;ole32.lib;olepro32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;kernel32.lib;gdi32.lib;user32.lib;glu32.lib;winmm.lib;dsound.lib;ole32.lib;olepro32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)player_demo.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <BaseAddress>0x800000</BaseAddress>
@@ -152,12 +153,13 @@
       <ForcedIncludeFiles>$(SolutionDir)/player_demo/demo_config.hpp;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;gdi32.lib;user32.lib;glu32.lib;winmm.lib;dsound.lib;ole32.lib;olepro32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;kernel32.lib;gdi32.lib;user32.lib;glu32.lib;winmm.lib;dsound.lib;ole32.lib;olepro32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)player_demo.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <BaseAddress>0x800000</BaseAddress>

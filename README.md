@@ -103,3 +103,5 @@ Barret, nothings.org.
 Have fun!
 (released April 2012)
 (updated October 2014 for Altona2)
+
+For Windows 11 + Visual Studio 2026 setup/build automation, see `WINDOWS11_VS2026.md`.

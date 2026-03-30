@@ -1507,16 +1507,16 @@ void Edit_Material_Material(WerkkzeugApp *app,WerkOp *op)
 #define ALPHA "|(unused)|(unused)|(unused)|tex1|tex2|tex3|tex4|color1|color2|color3|color4|0.5|0|2"
 
     app->ParaWin->AddSpecial("Auto-Combiner",0);
-    app->ParaWin->EditFlags ("!Color 1"     , 9,0x000010, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("!Color 2"     ,10,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("!Tex 1"       ,11,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("!Tex 2"       ,12,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("!Color 3"     ,15,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("!Color 4"     ,16,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("!Tex 3/Envi"  ,17,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("!Tex 4/Proj"  ,18,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("Vertex Color" ,19,0x000000, "*0(no alpha fade)"ALPHA":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
-    app->ParaWin->EditFlags ("Alpha A*B"    ,23,0x000000, "*8|invert:*0 (unused)"ALPHA":"
+    app->ParaWin->EditFlags ("!Color 1"     , 9,0x000010, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("!Color 2"     ,10,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("!Tex 1"       ,11,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("!Tex 2"       ,12,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("!Color 3"     ,15,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("!Color 4"     ,16,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("!Tex 3/Envi"  ,17,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("!Tex 4/Proj"  ,18,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("Vertex Color" ,19,0x000000, "*0(no alpha fade)" ALPHA ":*4nop|set|add|sub|mul|mul2|mul4|mul8|smooth|lerp");
+    app->ParaWin->EditFlags ("Alpha A*B"    ,23,0x000000, "*8|invert:*0 (unused)" ALPHA ":"
                                                         "*9|invert:*4 (unused)|light|(unused)|(unused)|tex1|tex2|tex3|tex4");
 #undef ALPHA
 

@@ -39,12 +39,12 @@
 #define sLINK_OGG         0                         // link ogg vorbis decoder
 #define sLINK_VIRUZ2      1                         // link viruz2 softsynth (assemblercode is always linked!)
 #define sLINK_KKRIEGER    1                         // link special code for kkrieger
-#define sLINK_MINMESH     0                         // link minmesh
+#define sLINK_MINMESH     1                         // link minmesh
 #define sLINK_LOADER      0                         // link new model loader (XSI2)
 #define sLINK_INTMATH     0                         // link new integer math model (for mobile)
 #define sLINK_PNG         0                         // link libpng (big, but supports images with alpha)
 #define sLINK_FRIED       0                         // link FRIED
-#define sLINK_MTRL20      0                         // link material 20
+#define sLINK_MTRL20      1                         // link material 20
 
 /****************************************************************************/
 /****************************************************************************/

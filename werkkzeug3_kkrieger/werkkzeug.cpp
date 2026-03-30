@@ -330,7 +330,7 @@ WerkkzeugApp::WerkkzeugApp()
   sAppendString(buffer,"/default.k",sizeof(buffer));
   FileWindow->SetPath(buffer);
 
-  AddTitle("Werkkzeug "VERSION,0,sCMDLS_EXIT);
+  AddTitle("Werkkzeug " VERSION,0,sCMDLS_EXIT);
 
 // document
 
@@ -427,7 +427,7 @@ WerkkzeugApp::WerkkzeugApp()
     SceneListWin->UpdateList();
   }
 */
-  LogWin->PrintLine(APPNAME" "VERSION" started.");
+  LogWin->PrintLine(APPNAME " " VERSION " started.");
 }
 
 WerkkzeugApp::~WerkkzeugApp()
@@ -1305,12 +1305,12 @@ void WerkkzeugApp::Export(sChar *name)
   sBool ok;
   sU8 *data,*dataStart;
   static sChar msg[128];
-  WerkExport export;
+  WerkExport exporter;
 
   ok = sTRUE;
   data = dataStart = new sU8[64*1024*1024];
 
-  if(!export.Export(Doc,data))
+  if(!exporter.Export(Doc,data))
     ok = sFALSE;
   else
   {
@@ -1323,6 +1323,10 @@ void WerkkzeugApp::Export(sChar *name)
     (new sDialogWindow)->InitOk(this,"Export","Export failed",0);
   else
   {
+    // Convenience copy for player_kkrieger fallback startup path.
+    sSystem->SaveFile("../../data/player_kkrieger_export.kx",dataStart,(sInt) (data-dataStart));
+    sSystem->SaveFile("../data/player_kkrieger_export.kx",dataStart,(sInt) (data-dataStart));
+    sSystem->SaveFile("data/player_kkrieger_export.kx",dataStart,(sInt) (data-dataStart));
     sSPrintF(msg,128,"Export ok, size %d bytes!",data-dataStart);
     (new sDialogWindow)->InitOk(this,"Export",msg,0);
   }
@@ -1344,7 +1348,7 @@ void WerkkzeugApp::MakeDemo(sChar *name)
   sU8 *exe,*packedExe;
   sInt outSize;
   static sChar msg[1024];
-  WerkExport export;
+  WerkExport exporter;
   //MAPFile map;
   CCAPackerBackEnd pbe;
   PackerFrontEnd *pfe = 0;
@@ -1379,7 +1383,7 @@ void WerkkzeugApp::MakeDemo(sChar *name)
   map.ReadMapFile((sChar*)mapf);
   delete[] mapf;*/
 
-  if(!export.Export(Doc,data))
+  if(!exporter.Export(Doc,data))
   {
     sSPrintF(msg,sizeof(msg),"Export failed");
     ok = sFALSE;
@@ -6332,9 +6336,9 @@ sBool WerkExport::Export(WerkDoc *doc,sU8 *&dataPtr)
   WerkOp *root[MAX_OP_ROOT],*op;
   KSpline *spline;
 
-  sU8 *SongData;
+  sU8 *SongData = 0;
   sInt SongSize;
-  sU8 *SampleData;
+  sU8 *SampleData = 0;
   sInt SampleSize;
 
   Doc = doc;
@@ -6361,19 +6365,30 @@ sBool WerkExport::Export(WerkDoc *doc,sU8 *&dataPtr)
   if(doc->SongName)
   {
     SongData = sSystem->LoadFile(doc->SongName,SongSize);
-    if(!SongData)
+    if(!SongData || SongSize <= 0)
+    {
+      SongData = 0;
       SongSize = 0;
+      sDPrintF("Export: could not load song '%s'\n",doc->SongName);
+    }
 
     sInt snlen = sGetStringLen(Doc->SongName);
-    if(snlen < 4 || sCmpMem(Doc->SongName + snlen - 4,".ogg",4))
+    if(SongData && SongSize > 0 && (snlen < 4 || sCmpMem(Doc->SongName + snlen - 4,".ogg",4)))
     {
       // v2mconv
       sInt convertedSize;
       sU8 *convertBuffer = sViruz2::ConvertV2M(SongData,SongSize,convertedSize);
 
-      delete[] SongData;
-      SongData = convertBuffer;
-      SongSize = convertedSize;
+      if(convertBuffer && convertedSize > 0)
+      {
+        delete[] SongData;
+        SongData = convertBuffer;
+        SongSize = convertedSize;
+      }
+      else
+      {
+        sDPrintF("Export: viruz2 conversion failed for '%s'\n",doc->SongName);
+      }
     }
   }
   if(doc->SampleName)
@@ -8580,4 +8595,3 @@ void WerkSceneNode2::UpdateLinks(WerkDoc *doc1)
 
 /****************************************************************************/
 /****************************************************************************/
-

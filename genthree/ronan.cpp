@@ -477,7 +477,7 @@ extern "C" void __stdcall ronanCBTick()
 	const Phoneme &p1=phonemes[w.curp1];
 	const Phoneme &p2=phonemes[w.curp2];
 	x=(sF32)sFPow(x,(sF32)p1.rank/(sF32)p2.rank);
-	SetFrame(p2,(abs(p2.rank-p1.rank)>8)?p2:p1,x,w.newframe);
+	SetFrame(p2,(sFAbs(p2.rank-p1.rank)>8.0f)?p2:p1,x,w.newframe);
 
 }
 

@@ -177,6 +177,7 @@ sBool sAppHandler(sInt code,sDInt value)
   sInt targetHeight;
 
   KOp *root;
+  sU32 hdrFlags;
 
   //GenBitmapTextureSizeOffset = -1;
   switch(code)
@@ -190,9 +191,21 @@ sBool sAppHandler(sInt code,sDInt value)
       data = sSystem->LoadFile(sSystem->GetCmdLine());
       if(data==0)
       {
-        data = sSystem->LoadFile("bpopening_05.kx");
+        // Preferred fallback: exported runtime blob from werkkzeug.
+#if sLINK_KKRIEGER
+        data = sSystem->LoadFile("../../data/player_kkrieger_export.kx");
         if(data==0)
-          sSystem->Abort("need data file");
+          data = sSystem->LoadFile("../data/player_kkrieger_export.kx");
+        if(data==0)
+          data = sSystem->LoadFile("data/player_kkrieger_export.kx");
+#endif
+        if(data==0)
+          data = sSystem->LoadFile("bpopening_05.kx");
+        if(data==0)
+        {
+          // Final fallback for developer/runtime builds: use data blob baked into data.asm.
+          data = DebugData;
+        }
       }
     }
 //#endif
@@ -207,6 +220,38 @@ sBool sAppHandler(sInt code,sDInt value)
     break;
 
   case sAPPCODE_INIT:
+    if(data==0)
+      data = PtrTable[0];
+
+    if(((sInt)data)==0x54525450)
+    {
+      data = sSystem->LoadFile(sSystem->GetCmdLine());
+      if(data==0)
+      {
+#if sLINK_KKRIEGER
+        data = sSystem->LoadFile("../../data/player_kkrieger_export.kx");
+        if(data==0)
+          data = sSystem->LoadFile("../data/player_kkrieger_export.kx");
+        if(data==0)
+          data = sSystem->LoadFile("data/player_kkrieger_export.kx");
+#endif
+      }
+    }
+
+    if(data==0)
+    {
+      // Final fallback for developer/runtime builds: use data blob baked into data.asm.
+      data = DebugData;
+    }
+
+    // KDoc::Init expects exported runtime stream whose first dword is small flags bitfield.
+    hdrFlags = *(sU32 *)data;
+    if(hdrFlags & ~7)
+    {
+      sSystem->Abort("invalid runtime data format (export .kx required)");
+      return sFALSE;
+    }
+
     Document = new KDoc;
 
     Document->Init(data);
@@ -264,6 +309,17 @@ sBool sAppHandler(sInt code,sDInt value)
 
 #if sLINK_KKRIEGER
     Game->ResetRoot(Environment,Document->RootOps[Document->CurrentRoot],1);
+
+    // Prefer a demo root if available (avoids black screen on wrong default root).
+    for(i=0;i<MAX_OP_ROOT;i++)
+    {
+      if(Document->RootOps[i] && Document->RootOps[i]->Cache &&
+         Document->RootOps[i]->Cache->ClassId==KC_DEMO)
+      {
+        Document->CurrentRoot = i;
+        break;
+      }
+    }
 #endif
 
     FirstTime = sSystem->GetTime();
@@ -373,11 +429,16 @@ sBool sAppHandler(sInt code,sDInt value)
     vp.Window.Init(0,sSystem->ConfigY*1/6,sSystem->ConfigX,sSystem->ConfigY*5/6);
 #endif
     GenOverlayManager->SetMasterViewport(vp);
+#if !sLINK_KKRIEGER
     RenderTargetManager->SetMasterViewport(vp);
+#endif
 
 #if sLINK_KKRIEGER
     sInt mode;
     mode = Game->GetNewRoot();
+
+    if(mode<0 || mode>=MAX_OP_ROOT || !Document->RootOps[mode])
+      mode = Document->CurrentRoot;
 
     if(mode!=Document->CurrentRoot)
     {
@@ -397,6 +458,18 @@ sBool sAppHandler(sInt code,sDInt value)
 
     // timing
 
+    if(Document->CurrentRoot<0 || Document->CurrentRoot>=MAX_OP_ROOT || !Document->RootOps[Document->CurrentRoot])
+    {
+      for(i=0;i<MAX_OP_ROOT;i++)
+      {
+        if(Document->RootOps[i])
+        {
+          Document->CurrentRoot = i;
+          break;
+        }
+      }
+    }
+
     Environment->InitFrame(beat,ThisTime);
     Document->AddEvents(Environment);
 #if sLINK_KKRIEGER
@@ -407,23 +480,46 @@ sBool sAppHandler(sInt code,sDInt value)
     // game painting
 
     clearvp.Init();
-
     sSystem->SetViewport(clearvp);
     sSystem->Clear(sVCF_ALL,0);
 
     Environment->GameCam.Init();
 #if sLINK_KKRIEGER
     Game->GetCamera(Environment->GameCam);
+    Environment->GameCam.ZoomY = 1.0f*vp.Window.XSize()/vp.Window.YSize();
 #endif
     
 
     //Environment->Aspect =  1.0f*vp.Window.XSize()/vp.Window.YSize();
+#if sLINK_KKRIEGER
+    Environment->Aspect = 1.0f*vp.Window.XSize()/vp.Window.YSize();
+#else
     Environment->Aspect = 2.0f;
+#endif
 
     root = Document->RootOps[Document->CurrentRoot];
-
-    if(beat>=0 && root->Cache->ClassId==KC_DEMO)
+    if(!root)
     {
+      sSystem->Abort("no valid root op to render");
+      return sFALSE;
+    }
+
+#if sLINK_KKRIEGER
+    if(root)
+#else
+    if(beat>=0 && root->Cache->ClassId==KC_DEMO)
+#endif
+    {
+#if sLINK_KKRIEGER
+      static sBool warnedWrongRoot = sFALSE;
+      if(root->Cache->ClassId!=KC_DEMO && !warnedWrongRoot)
+      {
+        sChar msg[256];
+        sSPrintF(msg,sizeof(msg),"black screen: root=%d class=%d",Document->CurrentRoot,root->Cache->ClassId);
+        sSystem->Abort(msg);
+        warnedWrongRoot = sTRUE;
+      }
+#endif
       GenOverlayManager->Reset(Environment);
       GenOverlayManager->RealPaint = sTRUE;
       GenOverlayManager->Game = Game;

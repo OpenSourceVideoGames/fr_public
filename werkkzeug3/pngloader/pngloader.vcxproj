@@ -131,6 +131,7 @@
     <Library Include="libpng.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="legacy_stdio_compat.cpp" />
     <ClCompile Include="loadpng.cpp" />
   </ItemGroup>
   <ItemGroup>

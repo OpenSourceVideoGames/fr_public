@@ -181,7 +181,9 @@ public:
   sArray<KSpline *> Splines;      // list of splines, updated during Build()
   sArray<KSceneNode2 *> SceneNodes; // list of nodes, updated during Build()
 
+#if !sLINK_KKRIEGER || !sPLAYER
   sScript Code;
+#endif
 };
 
 

@@ -10,3 +10,6 @@
                 global  _Material11psfr
 _Material11vsfr incbin  "../data/material11.vsfr"                
 _Material11psfr incbin  "../data/material11.psfr"
+
+                global  _DebugData
+_DebugData:     incbin  "../data/kkrieger3383.kx"

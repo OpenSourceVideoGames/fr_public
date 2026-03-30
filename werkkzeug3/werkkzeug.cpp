@@ -370,7 +370,7 @@ WerkkzeugApp::WerkkzeugApp()
   sAppendString(buffer,"/default.k",sizeof(buffer));
   FileWindow->SetPath(buffer);
 
-  AddTitle("Werkkzeug "VERSION,0,CMD_FILE_EXIT);
+  AddTitle("Werkkzeug " VERSION,0,CMD_FILE_EXIT);
 
 // document
 
@@ -482,7 +482,7 @@ WerkkzeugApp::WerkkzeugApp()
     SceneListWin->UpdateList();
   }
 */
-  LogWin->PrintLine(APPNAME" "VERSION"."BUILD" started.");
+  LogWin->PrintLine(APPNAME " " VERSION "." BUILD " started.");
   SetWindowTitle();
 }
 
@@ -10604,4 +10604,3 @@ void WerkSceneNode2::UpdateLinks(WerkDoc *doc1)
 
 /****************************************************************************/
 /****************************************************************************/
-

@@ -19,7 +19,8 @@
 #include "base/system.hpp"
 #include <windows.h>
 #include <dsound.h>
-#include <audiodefs.h>
+#include <ks.h>
+#include <ksmedia.h>
 
 // thread
 

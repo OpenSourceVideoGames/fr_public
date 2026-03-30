@@ -132,7 +132,7 @@ copy $(OutDir)viewer.exe ..\debug\MakeDemo.dat
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;d3d8.lib;dsound.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/Viewer.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <ProgramDatabaseFile>.\Release/Viewer.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>.\Release/Viewer.map</MapFileName>

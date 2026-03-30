@@ -14,7 +14,8 @@ static const sChar *ReplaceExtension(const sChar *name,const sChar *newExt)
   sCopyString(buffer,name,sizeof(buffer));
 
   // try and find last . in filename
-  for(sInt i=sGetStringLen(buffer)-1;i>=0;i--)
+  sInt i;
+  for(i=sGetStringLen(buffer)-1;i>=0;i--)
     if(buffer[i] == '.')
       break;
 

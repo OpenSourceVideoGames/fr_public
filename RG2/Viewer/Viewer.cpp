@@ -185,11 +185,7 @@ static void __stdcall errorReport(const sChar *msg)
   ExitProcess(0);
 }
 
-#if !defined(_DEBUG)
-void WinMainCRTStartup()
-#else
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
-#endif
 {
 #ifdef THREEINTROS
   DialogBoxIndirect(GetModuleHandle(0), (LPDLGTEMPLATE) mainDialog, 0, DialogProc);
